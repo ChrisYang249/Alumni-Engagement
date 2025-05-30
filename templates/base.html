@@ -1,0 +1,99 @@
+<!-- base.html: Lawrenceville Philanthropy Prediction -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Lawrenceville Philanthropy Prediction {% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #000000;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+        }
+        
+        nav {
+            background-color: #7C0A02; /* Lawrenceville dark red */
+            padding: 15px;
+            text-align: left;
+        }
+
+        nav a {
+            color: #FFFFFF;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 18px;
+            margin-left: 20px;
+            text-shadow: 0 0 6px #FF3333, 0 0 2px #FF3333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #111111;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+            border: 3px solid #7C0A02; /* Red outline */
+        }
+
+        h1, h2, label, .btn, .highlight-box {
+            color: #FFFFFF !important;
+            text-shadow: 0 0 6px #FF3333, 0 0 2px #FF3333;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            background-color: #7C0A02; /* Lawrenceville dark red */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #FF3333;
+        }
+
+        .highlight-box {
+            background-color: transparent;
+            border: 2px solid #FF3333;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .table-dark {
+            background-color: #222222;
+            color: #FFFFFF;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #181818;
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+    </nav>
+    
+    {% block content %}{% endblock %}
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

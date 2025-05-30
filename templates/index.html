@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Philanthropy Prediction{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Lawrenceville Philanthropy Prediction</h1>
+    <h2>Upload alumni data to predict philanthropic engagement</h2>
+
+    <form action="/predict" method="post" enctype="multipart/form-data">
+        <div class="highlight-box">
+            Use a properly formatted Excel file to ensure accurate predictions.
+        </div>
+        
+        <div class="file-upload" style="margin-top: 20px;">
+            <label for="excel-file" class="btn">Choose File</label>
+            <input type="file" id="excel-file" name="excel_file" accept=".xlsx,.xls" required style="display: none;">
+            <span id="file-name" style="margin-left: 10px;">No file chosen</span>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <button type="submit" class="btn">Predict Philanthropy</button>
+        </div>
+    </form>
+</div>
+
+{% block scripts %}
+<script>
+    document.getElementById('excel-file').addEventListener('change', function(e) {
+        const fileName = e.target.files[0] ? e.target.files[0].name : 'No file chosen';
+        document.getElementById('file-name').textContent = fileName;
+    });
+</script>
+{% endblock %}
+{% endblock %} 
