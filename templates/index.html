@@ -22,6 +22,22 @@
             <button type="submit" class="btn">Predict Philanthropy</button>
         </div>
     </form>
+
+    <hr style="margin: 40px 0;">
+    <h2>Upload alumni data to generate EDA graphs</h2>
+    <form action="/eda" method="post" enctype="multipart/form-data">
+        <div class="highlight-box">
+            Upload an Excel file with philanthropy status to explore trends and generate graphs.
+        </div>
+        <div class="file-upload" style="margin-top: 20px;">
+            <label for="eda-excel-file" class="btn">Choose File</label>
+            <input type="file" id="eda-excel-file" name="eda_excel_file" accept=".xlsx,.xls" required style="display: none;">
+            <span id="eda-file-name" style="margin-left: 10px;">No file chosen</span>
+        </div>
+        <div style="margin-top: 30px;">
+            <button type="submit" class="btn">Generate EDA Graphs</button>
+        </div>
+    </form>
 </div>
 
 {% block scripts %}
@@ -29,6 +45,10 @@
     document.getElementById('excel-file').addEventListener('change', function(e) {
         const fileName = e.target.files[0] ? e.target.files[0].name : 'No file chosen';
         document.getElementById('file-name').textContent = fileName;
+    });
+    document.getElementById('eda-excel-file').addEventListener('change', function(e) {
+        const fileName = e.target.files[0] ? e.target.files[0].name : 'No file chosen';
+        document.getElementById('eda-file-name').textContent = fileName;
     });
 </script>
 {% endblock %}

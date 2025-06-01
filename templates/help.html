@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Help & Documentation{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Help & Documentation</h1>
+    <div class="highlight-box">
+        This page explains the features of the Lawrenceville Philanthropy Prediction tool, including the EDA graphs, prediction model, and frequently asked questions.
+    </div>
+    <h2>What do the EDA graphs mean?</h2>
+    <ul>
+        <li><b>Philanthropy by House:</b> Shows the distribution of philanthropic engagement scores for each house. Useful for identifying houses with higher or lower average engagement.</li>
+        <li><b>Philanthropy by Gender:</b> Compares philanthropic engagement across genders.</li>
+        <li><b>Philanthropy by Class Year:</b> Visualizes engagement trends across different graduating classes.</li>
+        <li><b>Engagement Correlation Heatmap:</b> Displays the correlation between various engagement metrics and philanthropy, helping to identify which factors are most related to giving.</li>
+    </ul>
+    <h2>About the Prediction Model</h2>
+    <ul>
+        <li><b>Model Type:</b> Random Forest Classifier</li>
+        <li><b>Prediction Type:</b> Binary (predicts whether an alumnus is likely to be philanthropic or not)</li>
+        <li><b>Model Accuracy:</b> 0.99</li>
+    </ul>
+    <h2>FAQ</h2>
+    <ul>
+        <li><b>Q: What file format should I upload?</b><br>A: Please upload an Excel file (.xlsx or .xls) with the required columns as shown in the sample file.</li>
+        <li><b>Q: What does a prediction of 1 or 0 mean?</b><br>A: 1 means the model predicts the alumnus is likely to be philanthropic; 0 means not likely.</li>
+        <li><b>Q: How are the EDA graphs generated?</b><br>A: The graphs are generated automatically from your uploaded data using Python and Seaborn.</li>
+        <li><b>Q: Is my data stored permanently?</b><br>A: No, uploaded files and generated images are only kept temporarily for your session.</li>
+    </ul>
+    <a href="/" class="btn" style="margin-top: 30px;">Back to Home</a>
+</div>
+{% endblock %} 

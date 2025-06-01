@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}EDA Results{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Exploratory Data Analysis (EDA) Results</h1>
+    <div class="highlight-box">
+        The following graphs were generated from your uploaded data. Click on any image to enlarge it, or use the download button below each graph.
+    </div>
+    <div class="eda-images" style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; margin-top: 30px;">
+        {% for img in eda_images %}
+            <div style="flex: 1 1 350px; max-width: 400px; background: #181818; border-radius: 10px; box-shadow: 0 2px 8px #0008; padding: 18px; text-align: center; border: 2px solid #7C0A02;">
+                <div style="font-weight: bold; color: #FF3333; margin-bottom: 10px; font-size: 1.1em;">
+                    {{ img.split('_')[0]|capitalize }}
+                    {% if 'class_year' in img %}by Class Year{% elif 'gender' in img %}by Gender{% elif 'house' in img %}by House{% elif 'heatmap' in img %}Engagement Correlation Heatmap{% endif %}
+                </div>
+                <a href="{{ url_for('uploaded_file', filename=img) }}" target="_blank">
+                    <img src="{{ url_for('uploaded_file', filename=img) }}" alt="{{ img }}" style="max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #333; background: #222; padding: 6px; margin-bottom: 10px; transition: box-shadow 0.2s; box-shadow: 0 0 8px #7C0A02;">
+                </a>
+                <br>
+                <a href="{{ url_for('download_file', filename=img) }}" class="btn" style="margin-top: 10px; width: 90%; display: inline-block;">Download</a>
+            </div>
+        {% endfor %}
+    </div>
+    <a href="/" class="btn" style="margin-top: 40px;">Back to Home</a>
+</div>
+{% endblock %} 

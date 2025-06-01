@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Agg')
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
@@ -82,4 +84,7 @@ plt.title('Confusion Matrix: Philanthropy Engagement Prediction')
 plt.tight_layout()
 plt.savefig('confusion_matrix.png')
 plt.close()
-print("Confusion matrix plot saved as 'confusion_matrix.png'") 
+print("Confusion matrix plot saved as 'confusion_matrix.png'")
+
+df['Philanthropy_Prediction'] = y_pred
+df['Alumni Engagement Philanthropic FY25'] = y_pred 

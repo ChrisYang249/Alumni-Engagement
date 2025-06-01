@@ -27,7 +27,6 @@
             text-decoration: none;
             font-size: 18px;
             margin-left: 20px;
-            text-shadow: 0 0 6px #FF3333, 0 0 2px #FF3333;
         }
 
         .container {
@@ -42,7 +41,6 @@
 
         h1, h2, label, .btn, .highlight-box {
             color: #FFFFFF !important;
-            text-shadow: 0 0 6px #FF3333, 0 0 2px #FF3333;
         }
 
         h1 {
@@ -90,7 +88,14 @@
 <body>
     <nav>
         <a href="/">Home</a>
+        <a href="/help">Help & Documentation</a>
     </nav>
+    
+    <div style="margin-bottom: 30px;">
+        <h2>Download Sample Datasets</h2>
+        <a href="{{ url_for('static', filename='sample data for prediction.xlsx') }}" class="btn" download>Download Sample for Prediction</a>
+        <a href="{{ url_for('static', filename='sample data for EDA.xlsx') }}" class="btn" style="margin-left: 10px;" download>Download Sample for EDA</a>
+    </div>
     
     {% block content %}{% endblock %}
     
