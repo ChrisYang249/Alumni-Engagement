@@ -8,11 +8,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import uuid
+import secrets
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = './uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-app.secret_key = 'your_secret_key'  # Needed for flashing messages
+# Use environment variable for secret key, fallback to a secure random key for local dev
+def generate_fallback_secret():
+    return secrets.token_urlsafe(32)
+app.secret_key = os.environ.get('SECRET_KEY', generate_fallback_secret())
 
 # Load the pickled model and feature columns
 with open('philanthropy_model.pkl', 'rb') as f:
