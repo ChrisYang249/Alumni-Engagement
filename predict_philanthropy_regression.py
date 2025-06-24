@@ -3,7 +3,7 @@ matplotlib.use('Agg')
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score, KFold
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -61,10 +61,38 @@ rmse = np.sqrt(mean_squared_error(y_test, y_pred))
 mae = mean_absolute_error(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
 
-print('--- Regression Metrics ---')
+print('--- Regression Metrics (Test Set) ---')
 print(f'RMSE: {rmse:.3f}')
 print(f'MAE: {mae:.3f}')
 print(f'R² Score: {r2:.3f}')
+
+# Cross-validation to check for overfitting
+print('\n--- Cross-Validation Results ---')
+cv_scores_r2 = cross_val_score(rf_regressor, X_train, y_train, cv=5, scoring='r2')
+cv_scores_rmse = cross_val_score(rf_regressor, X_train, y_train, cv=5, scoring='neg_root_mean_squared_error')
+cv_scores_mae = cross_val_score(rf_regressor, X_train, y_train, cv=5, scoring='neg_mean_absolute_error')
+
+print(f'Cross-Validation R² Scores: {cv_scores_r2}')
+print(f'Cross-Validation R² Mean: {cv_scores_r2.mean():.3f} (+/- {cv_scores_r2.std() * 2:.3f})')
+print(f'Cross-Validation RMSE Mean: {-cv_scores_rmse.mean():.3f} (+/- {cv_scores_rmse.std() * 2:.3f})')
+print(f'Cross-Validation MAE Mean: {-cv_scores_mae.mean():.3f} (+/- {cv_scores_mae.std() * 2:.3f})')
+
+# Check for overfitting
+print('\n--- Overfitting Analysis ---')
+test_r2 = r2_score(y_test, y_pred)
+cv_r2_mean = cv_scores_r2.mean()
+overfitting_diff = test_r2 - cv_r2_mean
+
+print(f'Test Set R²: {test_r2:.3f}')
+print(f'CV Mean R²: {cv_r2_mean:.3f}')
+print(f'Difference (Test - CV): {overfitting_diff:.3f}')
+
+if overfitting_diff > 0.05:
+    print('⚠️  Potential overfitting detected (difference > 0.05)')
+elif overfitting_diff > 0.02:
+    print('⚠️  Minor overfitting possible (difference > 0.02)')
+else:
+    print('✅ No significant overfitting detected')
 
 # Feature importances
 importances = pd.Series(rf_regressor.feature_importances_, index=X.columns).sort_values(ascending=False)
@@ -77,7 +105,7 @@ importances.head(10).plot(kind='bar')
 plt.title('Top 10 Feature Importances (Random Forest Regression)')
 plt.ylabel('Importance')
 plt.tight_layout()
-plt.savefig('feature_importances_regression.png')
+# plt.savefig('feature_importances_regression.png')
 plt.close()
 print("\nFeature importances plot saved as 'feature_importances_regression.png'")
 
@@ -89,7 +117,7 @@ plt.xlabel('Actual Philanthropy Score')
 plt.ylabel('Predicted Philanthropy Score')
 plt.title('Actual vs Predicted Philanthropy Scores')
 plt.tight_layout()
-plt.savefig('actual_vs_predicted_regression.png')
+# plt.savefig('actual_vs_predicted_regression.png')
 plt.close()
 print("Actual vs predicted plot saved as 'actual_vs_predicted_regression.png'")
 

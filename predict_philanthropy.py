@@ -3,8 +3,8 @@ matplotlib.use('Agg')
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -54,10 +54,37 @@ rf.fit(X_train, y_train)
 
 # Predict and evaluate
 y_pred = rf.predict(X_test)
-print('--- Classification Report ---')
+print('--- Classification Report (Test Set) ---')
 print(classification_report(y_test, y_pred))
-print('\n--- Confusion Matrix ---')
+print('\n--- Confusion Matrix (Test Set) ---')
 print(confusion_matrix(y_test, y_pred))
+
+# Cross-validation to check for overfitting
+print('\n--- Cross-Validation Results ---')
+cv_scores_accuracy = cross_val_score(rf, X_train, y_train, cv=5, scoring='accuracy')
+cv_scores_f1 = cross_val_score(rf, X_train, y_train, cv=5, scoring='f1')
+
+print(f'Cross-Validation Accuracy Scores: {cv_scores_accuracy}')
+print(f'Cross-Validation Accuracy Mean: {cv_scores_accuracy.mean():.3f} (+/- {cv_scores_accuracy.std() * 2:.3f})')
+print(f'Cross-Validation F1 Scores: {cv_scores_f1}')
+print(f'Cross-Validation F1 Mean: {cv_scores_f1.mean():.3f} (+/- {cv_scores_f1.std() * 2:.3f})')
+
+# Check for overfitting
+print('\n--- Overfitting Analysis ---')
+test_accuracy = accuracy_score(y_test, y_pred)
+cv_accuracy_mean = cv_scores_accuracy.mean()
+overfitting_diff = test_accuracy - cv_accuracy_mean
+
+print(f'Test Set Accuracy: {test_accuracy:.3f}')
+print(f'CV Mean Accuracy: {cv_accuracy_mean:.3f}')
+print(f'Difference (Test - CV): {overfitting_diff:.3f}')
+
+if overfitting_diff > 0.05:
+    print('⚠️  Potential overfitting detected (difference > 0.05)')
+elif overfitting_diff > 0.02:
+    print('⚠️  Minor overfitting possible (difference > 0.02)')
+else:
+    print('✅ No significant overfitting detected')
 
 # Feature importances
 importances = pd.Series(rf.feature_importances_, index=X.columns).sort_values(ascending=False)
@@ -67,7 +94,7 @@ print(importances.head(10))
 # Visualize top 10 feature importances
 plt.figure(figsize=(10, 6))
 importances.head(10).plot(kind='bar')
-plt.title('Top 10 Feature Importances (Random Forest)')
+plt.title('Top 10 Feature Importances (Random Forest Classification)')
 plt.ylabel('Importance')
 plt.tight_layout()
 plt.savefig('feature_importances.png')
@@ -86,5 +113,3 @@ plt.savefig('confusion_matrix.png')
 plt.close()
 print("Confusion matrix plot saved as 'confusion_matrix.png'")
 
-df['Philanthropy_Prediction'] = y_pred
-df['Alumni Engagement Philanthropic FY25'] = y_pred 
