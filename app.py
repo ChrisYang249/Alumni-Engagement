@@ -18,11 +18,22 @@ def generate_fallback_secret():
     return secrets.token_urlsafe(32)
 app.secret_key = os.environ.get('SECRET_KEY', generate_fallback_secret())
 
-# Load the pickled model and feature columns
+# Load both models
 with open('philanthropy_model.pkl', 'rb') as f:
     model_bundle = pickle.load(f)
-    model = model_bundle['model']
-    feature_columns = model_bundle['feature_columns']
+    classification_model = model_bundle['model']
+    classification_features = model_bundle['feature_columns']
+
+# Load regression model if it exists
+regression_model = None
+regression_features = None
+try:
+    with open('philanthropy_model_regression.pkl', 'rb') as f:
+        regression_bundle = pickle.load(f)
+        regression_model = regression_bundle['model']
+        regression_features = regression_bundle['feature_columns']
+except FileNotFoundError:
+    print("Regression model not found. Run predict_philanthropy_regression.py first.")
 
 @app.route('/')
 def home():
@@ -38,10 +49,24 @@ def predict():
     if file.filename == '':
         flash('No selected file')
         return redirect(request.url)
+    
+    # Get prediction type from form
+    prediction_type = request.form.get('prediction_type', 'classification')
+    
     if file:
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(file_path)
         df = pd.read_excel(file_path)
+
+        # Choose model based on prediction type
+        if prediction_type == 'regression' and regression_model is not None:
+            model = regression_model
+            feature_columns = regression_features
+            prediction_col = 'Philanthropy_Prediction_Score'
+        else:
+            model = classification_model
+            feature_columns = classification_features
+            prediction_col = 'Philanthropy_Prediction'
 
         # Preprocess input to match model's expected features
         # Fill missing engagement scores with 0
@@ -62,18 +87,21 @@ def predict():
         X = df_model.reindex(columns=feature_columns, fill_value=0)
         # Predict
         predictions = model.predict(X)
-        df['Philanthropy_Prediction'] = predictions
-        output_filename = f"predictions_{file.filename}"
+        df[prediction_col] = predictions
+        output_filename = f"predictions_{prediction_type}_{file.filename}"
         output_path = os.path.join(app.config['UPLOAD_FOLDER'], output_filename)
         
         # Ensure all columns are included in the output
         df.to_excel(output_path, index=False)
         
         # Create a preview DataFrame with key columns for display
-        preview_df = df[['Gender', 'Class Year', 'Circle/Crescent House', 'Philanthropy_Prediction']].head(20)
+        preview_columns = ['Gender', 'Class Year', 'Circle/Crescent House', prediction_col]
+        preview_df = df[preview_columns].head(20)
+        
         # Update 'results.html' to use dark red/black theme and pass only the filename and preview table
         return render_template('results.html', 
                              filename=output_filename, 
+                             prediction_type=prediction_type,
                              tables=[preview_df.to_html(classes='table table-dark table-striped', index=False)])
     return redirect(url_for('home'))
 

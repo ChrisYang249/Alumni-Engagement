@@ -6,7 +6,11 @@
 <div class="container">
     <h1>Your philanthropy predictions are ready</h1>
     <div class="highlight-box">
-        Your alumni predictions have been generated successfully.
+        {% if prediction_type == 'regression' %}
+            Your alumni philanthropy score predictions (1-10 scale) have been generated successfully.
+        {% else %}
+            Your alumni binary philanthropy predictions (Will they give? Yes/No) have been generated successfully.
+        {% endif %}
     </div>
     <a href="{{ url_for('download_file', filename=filename) }}" class="btn">Download Results</a>
     <br><br>

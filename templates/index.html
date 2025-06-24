@@ -12,6 +12,20 @@
             Use a properly formatted Excel file to ensure accurate predictions.
         </div>
         
+        <div class="prediction-type" style="margin: 20px 0;">
+            <h3>Select Prediction Type:</h3>
+            <div class="radio-group">
+                <label class="radio-label">
+                    <input type="radio" name="prediction_type" value="classification" checked>
+                    <span class="radio-text">Binary Classification (Will they give? Yes/No)</span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="prediction_type" value="regression">
+                    <span class="radio-text">Regression Score (Predicted philanthropy score 1-10)</span>
+                </label>
+            </div>
+        </div>
+        
         <div class="file-upload" style="margin-top: 20px;">
             <label for="excel-file" class="btn">Choose File</label>
             <input type="file" id="excel-file" name="excel_file" accept=".xlsx,.xls" required style="display: none;">

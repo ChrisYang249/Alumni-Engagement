@@ -82,6 +82,48 @@
         .table-striped tbody tr:nth-of-type(odd) {
             background-color: #181818;
         }
+        
+        .prediction-type {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #7C0A02;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .radio-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        
+        .radio-label:hover {
+            background-color: #2a2a2a;
+        }
+        
+        .radio-label input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        
+        .radio-text {
+            font-size: 16px;
+            color: #FFFFFF;
+        }
+        
+        h3 {
+            color: #FFFFFF;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
     </style>
     {% block head %}{% endblock %}
 </head>
